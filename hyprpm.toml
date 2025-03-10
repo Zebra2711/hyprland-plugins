@@ -40,13 +40,6 @@ build = [
     "make -C borders-plus-plus all",
 ]
 
-[csgo-vulkan-fix]
-description = "A plugin to fix incorrect mouse offsets on csgo in Vulkan"
-authors = ["Vaxry"]
-output = "csgo-vulkan-fix/csgo-vulkan-fix.so"
-build = [
-    "make -C csgo-vulkan-fix all",
-]
 
 [hyprbars]
 description = "A plugin to add title bars to windows"
@@ -56,36 +49,3 @@ build = [
     "make -C hyprbars all",
 ]
 
-[hyprtrails]
-description = "A plugin to add trails behind moving windows"
-authors = ["Vaxry"]
-output = "hyprtrails/hyprtrails.so"
-build = [
-    "make -C hyprtrails all",
-]
-
-[hyprwinwrap]
-description = "A clone of xwinwrap for Hyprland"
-authors = ["Vaxry"]
-output = "hyprwinwrap/hyprwinwrap.so"
-build = [
-    "make -C hyprwinwrap all",
-]
-
-[hyprexpo]
-description = "A plugin to add expo (overlay) for workspaces"
-authors = ["Vaxry"]
-output = "hyprexpo/hyprexpo.so"
-build = [
-    "make -C hyprexpo all",
-]
-since_hyprland = 4364
-
-[xtra-dispatchers]
-description = "A plugin to add some extra dispatchers"
-authors = ["Vaxry"]
-output = "xtra-dispatchers/xtra-dispatchers.so"
-build = [
-    "make -C xtra-dispatchers all",
-]
-since_hyprland = 5573
