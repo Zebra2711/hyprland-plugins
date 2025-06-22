@@ -292,13 +292,13 @@ void CHyprBar::renderText(SP<CTexture> out, const std::string& text, const CHypr
     // copy the data to an OpenGL texture we have
     const auto DATA = cairo_image_surface_get_data(CAIROSURFACE);
     out->allocate();
-    glBindTexture(GL_TEXTURE_2D, out->m_texID);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    out->bind();
+    out->setTexParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    out->setTexParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 #ifndef GLES2
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_BLUE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_RED);
+    out->setTexParameter(GL_TEXTURE_SWIZZLE_R, GL_BLUE);
+    out->setTexParameter(GL_TEXTURE_SWIZZLE_B, GL_RED);
 #endif
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufferSize.x, bufferSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, DATA);
@@ -381,13 +381,13 @@ void CHyprBar::renderBarTitle(const Vector2D& bufferSize, const float scale) {
     // copy the data to an OpenGL texture we have
     const auto DATA = cairo_image_surface_get_data(CAIROSURFACE);
     m_pTextTex->allocate();
-    glBindTexture(GL_TEXTURE_2D, m_pTextTex->m_texID);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    m_pTextTex->bind();
+    m_pTextTex->setTexParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    m_pTextTex->setTexParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 #ifndef GLES2
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_BLUE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_RED);
+    m_pTextTex->setTexParameter(GL_TEXTURE_SWIZZLE_R, GL_BLUE);
+    m_pTextTex->setTexParameter(GL_TEXTURE_SWIZZLE_B, GL_RED);
 #endif
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufferSize.x, bufferSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, DATA);
@@ -449,13 +449,13 @@ void CHyprBar::renderBarButtons(const Vector2D& bufferSize, const float scale) {
     // copy the data to an OpenGL texture we have
     const auto DATA = cairo_image_surface_get_data(CAIROSURFACE);
     m_pButtonsTex->allocate();
-    glBindTexture(GL_TEXTURE_2D, m_pButtonsTex->m_texID);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    m_pButtonsTex->bind();
+    m_pButtonsTex->setTexParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    m_pButtonsTex->setTexParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 #ifndef GLES2
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_BLUE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_RED);
+    m_pButtonsTex->setTexParameter(GL_TEXTURE_SWIZZLE_R, GL_BLUE);
+    m_pButtonsTex->setTexParameter(GL_TEXTURE_SWIZZLE_B, GL_RED);
 #endif
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bufferSize.x, bufferSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, DATA);
@@ -598,7 +598,7 @@ void CHyprBar::renderPass(PHLMONITOR pMonitor, const float& a) {
         glClearStencil(0);
         glClear(GL_STENCIL_BUFFER_BIT);
 
-        glEnable(GL_STENCIL_TEST);
+        g_pHyprOpenGL->setCapStatus(GL_STENCIL_TEST, true);
 
         glStencilFunc(GL_ALWAYS, 1, -1);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -628,7 +628,7 @@ void CHyprBar::renderPass(PHLMONITOR pMonitor, const float& a) {
         // cleanup stencil
         glClearStencil(0);
         glClear(GL_STENCIL_BUFFER_BIT);
-        glDisable(GL_STENCIL_TEST);
+        g_pHyprOpenGL->setCapStatus(GL_STENCIL_TEST, false);
         glStencilMask(-1);
         glStencilFunc(GL_ALWAYS, 1, 0xFF);
     }
