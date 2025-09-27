@@ -705,16 +705,21 @@ void CHyprBar::updateRules() {
     auto       rules                = PWINDOW->m_matchedRules;
     auto       prevHidden           = m_hidden;
     auto       prevForcedTitleColor = m_bForcedTitleColor;
+    auto       prevNoScreenShare    = PWINDOW->m_windowData.noScreenShare.valueOrDefault();
 
     m_bForcedBarColor   = std::nullopt;
     m_bForcedTitleColor = std::nullopt;
     m_hidden            = false;
 
+    const bool noScreenShare = PWINDOW->m_windowData.noScreenShare.valueOrDefault();
     for (auto& r : rules) {
         applyRule(r);
     }
 
-    if (prevHidden != m_hidden)
+    if (noScreenShare)
+      m_hidden = true;
+
+    if (prevNoScreenShare != noScreenShare || prevHidden != m_hidden)
         g_pDecorationPositioner->repositionDeco(this);
     if (prevForcedTitleColor != m_bForcedTitleColor)
         m_bTitleColorChanged = true;
